@@ -12,5 +12,6 @@
 
 + (instancetype)sharedRepository;
 - (NSDictionary<NSString *, PGImage *> *)imagesForIdentifier:(NSString *)identifier;
+- (void)saveImage:(PGImage *)image;
 
 @end

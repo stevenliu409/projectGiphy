@@ -22,13 +22,16 @@
 
     PGImage *imageSmall = [self imageFromJSON:imageSmallDict];
     imageSmall.identifier = identifier;
+    imageSmall.sizeType = PGImageSizeTypeSmall;
 
     PGImage *imageMedium = [self imageFromJSON:imageMediumDict];
     imageMedium.identifier = identifier;
+    imageMedium.sizeType = PGImageSizeTypeMedium;
 
     PGImage *imageLarge = [self imageFromJSON:imageLargeDict];
     imageLarge.identifier = identifier;
-
+    imageLarge.sizeType = PGImageSizeTypeLarge;
+    
     [images setObject:imageSmall forKey:@"small"];
     [images setObject:imageMedium forKey:@"medium"];
     [images setObject:imageLarge forKey:@"large"];

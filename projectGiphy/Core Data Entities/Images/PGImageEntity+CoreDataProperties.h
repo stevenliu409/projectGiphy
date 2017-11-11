@@ -2,12 +2,13 @@
 //  PGImageEntity+CoreDataProperties.h
 //  projectGiphy
 //
-//  Created by Steven Liu on 2017-10-28.
+//  Created by Steven Liu on 2017-11-11.
 //  Copyright © 2017 Steven Liu. All rights reserved.
 //
 //
 
 #import "PGImageEntity.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,10 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<PGImageEntity *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSString *url;
-@property (nonatomic) float width;
 @property (nonatomic) float height;
 @property (nullable, nonatomic, copy) NSString *identifier;
+@property (nullable, nonatomic, copy) NSString *url;
+@property (nonatomic) float width;
+@property (nonatomic) int64_t sizeType;
 
 @end
 

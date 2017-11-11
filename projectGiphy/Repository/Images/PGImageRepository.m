@@ -9,6 +9,8 @@
 #import "PGImageRepository.h"
 #import "PGImageConverter.h"
 #import "AppDelegate.h"
+#import "PGImageEntity.h"
+#import "PGImage.h"
 
 @interface PGImageRepository ()
 @property (nonatomic, strong) PGImageConverter *imageConverter;
@@ -67,5 +69,56 @@
 {
     return nil;
 }
+
+- (void)saveImage:(PGImage *)image
+{
+    PGImageEntity *imageEntity = [self _retrieveImageWithIdentifier:image.identifier];
+}
+
+- (void)_saveContext:(NSManagedObjectContext *)context
+{
+    [context performBlock:^{
+        NSError *error;
+        if (![context save:&error])
+        {
+            NSLog(@"error = %@", [error localizedDescription]);
+        }
+
+        if (context.parentContext != nil)
+        {
+            [context.parentContext performBlock:^{
+                NSError *error;
+                if (![context.parentContext save:&error])
+                {
+                    NSLog(@"error = %@", [error localizedDescription]);
+                }
+            }];
+        }
+    }];
+}
+
+- (PGImageEntity *)_retrieveImageWithIdentifier:(NSString *)identifier
+{
+    NSManagedObjectContext *currentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ImageEntity"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"identifier == %@", identifier]];
+    NSError *error = nil;
+    NSArray *results = [currentContext executeFetchRequest:request error:&error];
+    if (error)
+    {
+        NSLog(@"Error fetching Gif objects: %@\n%@", [error localizedDescription], [error userInfo]);
+    }
+
+    if ([results count] == 0)
+    {
+        return [self _createGifEntity];
+    }
+
+    return [results firstObject];
+
+}
+
+
 
 @end
