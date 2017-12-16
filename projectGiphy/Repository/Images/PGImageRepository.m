@@ -67,42 +67,44 @@
 
 - (NSDictionary<NSString *,PGImage *> *)imagesForIdentifier:(NSString *)identifier
 {
+    [self _retrieveImagesWithIdentifier:identifier];
+
+    return nil;
+}
+
+- (NSArray<PGImageEntity *> *)_retrieveImagesWithIdentifier:(NSString *)identifier
+{
+    NSFetchRequest *request = [self _fetchImagesForIdentifier:identifier];
+    [self _executeFetchForRequest:request];
+
     return nil;
 }
 
 - (void)saveImage:(PGImage *)image
 {
-    PGImageEntity *imageEntity = [self _retrieveImageWithIdentifier:image.identifier];
+    PGImageEntity *imageEntity = [self _retrieveImageWithIdentifier:image.identifier sizeType:image.sizeType];
+
+    [self.imageConverter updateImageEntity:imageEntity withImage:image];
+
 }
 
-- (void)_saveContext:(NSManagedObjectContext *)context
+- (PGImageEntity *)_retrieveImageWithIdentifier:(NSString *)identifier sizeType:(PGImageSizeType)sizeType
 {
-    [context performBlock:^{
-        NSError *error;
-        if (![context save:&error])
-        {
-            NSLog(@"error = %@", [error localizedDescription]);
-        }
+    NSFetchRequest *request = [self _fetchImagesForIdentifier:identifier sizeType:sizeType];
+    [self _executeFetchForRequest:request];
 
-        if (context.parentContext != nil)
-        {
-            [context.parentContext performBlock:^{
-                NSError *error;
-                if (![context.parentContext save:&error])
-                {
-                    NSLog(@"error = %@", [error localizedDescription]);
-                }
-            }];
-        }
-    }];
+    return nil;
 }
 
-- (PGImageEntity *)_retrieveImageWithIdentifier:(NSString *)identifier
+- (NSArray<PGImageEntity *> *)_createImageEntities
+{
+    return nil;
+}
+
+- (NSArray *)_executeFetchForRequest:(NSFetchRequest *)request
 {
     NSManagedObjectContext *currentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ImageEntity"];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"identifier == %@", identifier]];
     NSError *error = nil;
     NSArray *results = [currentContext executeFetchRequest:request error:&error];
     if (error)
@@ -112,13 +114,57 @@
 
     if ([results count] == 0)
     {
-        return [self _createGifEntity];
+        return [self _createImageEntities];
     }
 
     return [results firstObject];
+}
 
+- (void)_save
+{
+    NSManagedObjectContext *currentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    currentContext.parentContext = self.mainContext;
+
+    [currentContext performBlock:^{
+        NSError *error;
+        if (![currentContext save:&error])
+        {
+            NSLog(@"error = %@", [error localizedDescription]);
+        }
+
+        if (currentContext.parentContext != nil)
+        {
+            [currentContext.parentContext performBlock:^{
+                NSError *error;
+                if (![currentContext.parentContext save:&error])
+                {
+                    NSLog(@"error = %@", [error localizedDescription]);
+                }
+            }];
+        }
+    }];
 }
 
 
+///-------------------------------------------------
+/// Fetch Requests
+///-------------------------------------------------
+#pragma mark - Fetch Requests
+
+- (NSFetchRequest *)_fetchImagesForIdentifier:(NSString *)identifier
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ImageEntity"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"identifier == %@", identifier]];
+
+    return request;
+}
+
+- (NSFetchRequest *)_fetchImagesForIdentifier:(NSString *)identifier sizeType:(PGImageSizeType)sizeType
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ImageEntity"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"identifier == %@ && sizeType == %@", identifier, sizeType]];
+
+    return request;
+}
 
 @end

@@ -7,7 +7,7 @@
 //
 //
 
-#import "PGImageEntity.h"
+#import "PGImageEntity+CoreDataProperties.h"
 
 @implementation PGImageEntity (CoreDataProperties)
 
@@ -15,10 +15,11 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"ImageEntity"];
 }
 
-@dynamic height;
 @dynamic identifier;
-@dynamic url;
-@dynamic width;
 @dynamic sizeType;
+@dynamic webURL;
+@dynamic width;
+@dynamic height;
+@dynamic fileURL;
 
 @end

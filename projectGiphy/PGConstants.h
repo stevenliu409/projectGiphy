@@ -11,4 +11,10 @@
 
 #define API_KEY @"mmPEUlXJn4ASv7truvw7XH3HfBPNnKlG"
 
+typedef NS_ENUM(NSUInteger, PGImageSizeType) {
+    PGImageSizeTypeSmall = 0,
+    PGImageSizeTypeMedium,
+    PGImageSizeTypeLarge
+};
+
 #endif /* PGConstants_h */

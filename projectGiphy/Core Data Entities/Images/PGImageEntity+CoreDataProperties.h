@@ -16,11 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<PGImageEntity *> *)fetchRequest;
 
-@property (nonatomic) float height;
 @property (nullable, nonatomic, copy) NSString *identifier;
-@property (nullable, nonatomic, copy) NSString *url;
-@property (nonatomic) float width;
+@property (nullable, nonatomic, copy) NSString *webURL;
+@property (nullable, nonatomic, copy) NSString *fileURL;
 @property (nonatomic) int64_t sizeType;
+@property (nonatomic) float width;
+@property (nonatomic) float height;
 
 @end
 

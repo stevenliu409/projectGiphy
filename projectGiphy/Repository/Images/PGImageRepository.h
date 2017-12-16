@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PGConstants.h"
+
 @class PGImage;
 @interface PGImageRepository : NSObject
 

@@ -7,16 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-typedef NS_ENUM(NSUInteger, PGImageSizeType) {
-    PGImageSizeTypeSmall = 0,
-    PGImageSizeTypeMedium,
-    PGImageSizeTypeLarge
-};
+#import "PGConstants.h"
 
 @interface PGImage : NSObject
 
 @property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, copy) NSString *url;
+@property (nonatomic, copy) NSString *webURL;
+@property (nonatomic, copy) NSString *fileURL;
 @property (nonatomic, assign) float width;
 @property (nonatomic, assign) float height;
 @property (nonatomic, assign) PGImageSizeType sizeType;

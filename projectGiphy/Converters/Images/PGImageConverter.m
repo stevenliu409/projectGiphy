@@ -42,7 +42,7 @@
 - (PGImage *)imageFromJSON:(NSDictionary *)json
 {
     PGImage *image = [[PGImage alloc] init];
-    image.url = json[@"url"];
+    image.webURL = json[@"url"];
     image.width = [json[@"width"] floatValue];
     image.height = [json[@"height"] floatValue];
 
@@ -53,9 +53,10 @@
 {
     PGImage *image = [[PGImage alloc] init];
     image.identifier = imageEntity.identifier;
-    image.url = imageEntity.url;
+    image.webURL = imageEntity.webURL;
     image.width = imageEntity.width;
     image.height = imageEntity.height;
+    image.fileURL = imageEntity.fileURL;
 
     return image;
 }
@@ -63,9 +64,10 @@
 - (void)updateImageEntity:(PGImageEntity *)imageEntity withImage:(PGImage *)image
 {
     imageEntity.identifier = image.identifier;
-    imageEntity.url = image.url;
+    imageEntity.webURL = image.webURL;
     imageEntity.width = image.width;
     imageEntity.height = image.height;
+    imageEntity.fileURL = image.fileURL;
 }
 
 @end

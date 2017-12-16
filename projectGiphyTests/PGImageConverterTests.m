@@ -26,7 +26,7 @@
     NSDictionary *json = [self _createSingleImageData];
     PGImage *image = [self.imageConverter imageFromJSON:json];
 
-    XCTAssertTrue([image.url isEqualToString:@"www.google.com"]);
+    XCTAssertTrue([image.webURL isEqualToString:@"www.google.com"]);
     XCTAssertEqual(image.width, 100);
     XCTAssertEqual(image.height, 200);
 }

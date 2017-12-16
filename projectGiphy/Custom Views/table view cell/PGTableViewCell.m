@@ -38,7 +38,7 @@
     self.gif = gif;
     PGImage *image = self.gif.images[@"small"];
 
-    if (image.url == nil)
+    if (image.webURL == nil)
     {
         [self _showError];
     }
@@ -73,9 +73,9 @@
 - (void)_showImage
 {
     PGImage *image = self.gif.images[@"small"];
-    NSLog(@"trending data = %@", image.url);
+    NSLog(@"trending data = %@", image.webURL);
 
-    FLAnimatedImage *gifImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:image.url]]];
+    FLAnimatedImage *gifImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:image.webURL]]];
     self.gifImageView.animatedImage = gifImage;
     self.statusLabel.text = @"";
     self.favouriteButton.hidden = NO;
